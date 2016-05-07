@@ -2,12 +2,9 @@ package controllers;
 
 import Interfaces.impls.CollectionServiceDataList;
 import Interfaces.impls.CollectionsCarList;
-//import Interfaces.impls.DataBaseCarList;
 import Interfaces.impls.CollectionsPartsTable;
 import Objects.Automobile;
-//import connectionDB.DbConnection;
 import connectionDB.DbConnection;
-
 import controllers.*;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
@@ -55,16 +52,12 @@ public class MainController {
     Connection conn=null;
     PreparedStatement pst=null;
     ResultSet rs = null;
-
     private CollectionsCarList tabServiceListImpl = new CollectionsCarList();
     private ServInfBaseCreating servInfBaseCreating =  new ServInfBaseCreating();
     BrandAutoComplete helloAutoComplete = new BrandAutoComplete();
     VinAutoComplete modelAutoComplete = new VinAutoComplete();
-   // private DataBaseCarList dataBaseCarList = new DataBaseCarList();
     public Stage mainStage= new Stage();
-    //final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
     Exception evtt = new Exception();
-
     @FXML private Button btnAdd;
     @FXML private Button btnEdit;
     @FXML private Button btnDelete;
@@ -163,7 +156,7 @@ public class MainController {
         tabServiceListImpl.fillTestData();
 
         tabServiceList.setItems(tabServiceListImpl.getAutomobileList());
-        //initLoader();
+       
         initStoreLoader();
         initServInfLoader();
         initAddDbLoader();
@@ -179,12 +172,6 @@ public class MainController {
 
 
     }
-    /*public void dp(LocalDate localDate) {
-       txtDPicker.setValue(localDate);
-        txtDPicker.getStyleClass().add(DEFAULT_STYLE_CLASS);
-        txtDPicker.setAccessibleRole(AccessibleRole.DATE_PICKER);
-        txtDPicker.setEditable(true);
-    }*/
     private int varSIValue(){
         int spd = Integer.parseInt(txtSpeedometer.getText());
         int sInt = Integer.parseInt(txtServInterval.getText());
@@ -203,7 +190,7 @@ public class MainController {
 
         return varSI;
     }
-    //метод для получения списка списка моделей
+    //метод для получения списка моделей
     private ArrayList<String> getModels(){
     ArrayList<String> name = new ArrayList<>();
         Connection conn = DbConnection.ConnectDb();
@@ -218,22 +205,15 @@ public class MainController {
             }
         }catch(Exception e){
             JOptionPane.showMessageDialog(null,e);}
-            finally {try {
-                    if (rs != null) {rs.close();}
-                    if (pst != null) {pst.close();}
-                    if(conn !=null){conn.close();}
-                } catch (Exception ev) {
-                    ev.printStackTrace();
-                }
-
-        }
+              }
         return name;
     }
-
+    //Обновляем тблицу
     private void tabUpdate(){
     tabServiceList.getItems().clear();
     tabServiceListImpl.fillTestData();
 }
+    //инициализируем склад
     private void initStoreLoader(){
         try{
             fxmlStoreLoader.setLocation(getClass().getResource("/fxml/store.fxml"));
@@ -244,6 +224,7 @@ public class MainController {
             e.printStackTrace();
         }
     }
+    //инициализируем склад при проведении текущих работ
     private void initCurrentStoreLoader(){
         try{
             fxmlCurrentStoreLoader.setLocation(getClass().getResource("/fxml/CurrentWorkDialog.fxml"));
@@ -254,6 +235,7 @@ public class MainController {
             e.printStackTrace();
         }
     }
+    //инициализируем окно сервисной информации
     private void initServInfLoader(){
         try{
             fxmlServInfLoader.setLocation(getClass().getResource("/fxml/Service.fxml"));
@@ -264,6 +246,7 @@ public class MainController {
             e.printStackTrace();
         }
     }
+    //добавляем в базу новый склад
     private void initAddDbLoader(){
         try{
             fxmlAddDBLoader.setLocation(getClass().getResource("/fxml/addStore.fxml"));
@@ -274,6 +257,7 @@ public class MainController {
             e.printStackTrace();
         }
     }
+    //при выборе строки в таблице,заполняем поля
     private void fieldText(Automobile automobile){
         if (automobile==null){
             return;
@@ -299,6 +283,7 @@ public class MainController {
 
 
     }
+    //вставляем в таблицу БД данные о новом автомобиле.
     private void addToTab(){
         // TODO add your handling code here:
         Connection conn = DbConnection.ConnectDb();
@@ -355,20 +340,18 @@ public class MainController {
             }
         }
 }
-    private GregorianCalendar datePick() {
 
+    private GregorianCalendar datePick() {
         LocalDate localDate = txtDPicker.getValue();
         Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
        Date date = Date.from(instant);
-
-
-
     cal.setTime(date);
         System.out.println(cal);
     return cal;
 
 
 }
+    //расчитываем остаток дней до проведения ТО 
     public String dayCounting(){
         String s="";
         GregorianCalendar today = new GregorianCalendar();
@@ -391,6 +374,7 @@ days = 365-days;
         s=Integer.toString(days);
         return s;
     }
+    //поиск автомобиля по гаражному номеру
     private void searchTab() {
         Connection conn = DbConnection.ConnectDb();
         PreparedStatement pst = null;
@@ -449,6 +433,7 @@ days = 365-days;
             }
         }
     }
+    //обновление БД
     private void updateTab(){
         Connection conn = DbConnection.ConnectDb();
         PreparedStatement pst = null;
@@ -512,9 +497,10 @@ days = 365-days;
             }
         }
     }
-    public void test(){
-
-    }
+    //инициализация слушателей
+    /*обновляем счетчик
+    по значению остатка до ТО,определяем подходящие авто,выделяем их красным цветом
+    */
     private void  initListeners(){
         tabServiceListImpl.getAutomobileList().addListener(new ListChangeListener<Automobile>() {
             @Override
@@ -556,6 +542,7 @@ days = 365-days;
         });
 
     }
+    //конвертируем строку в дату
     public void stringConverter(String date){
     txtDPicker.setConverter(new StringConverter<LocalDate>() {
         String pattern = "yyyy-MM-dd";
@@ -583,7 +570,7 @@ days = 365-days;
     });
 }
     /*Метод  преобразует строку в формат даты*
-    / Затем получаем количество дней-разницу между датами(указанной и текущей)
+    / Затем получаем количество дней - разницу между датами(указанной и текущей)
     если дата взята с прошлого,позапрошлого и т.д года
     используем условие
      */
@@ -620,6 +607,7 @@ days = 365-days;
     private void updateCountLabel() {
         labelCount.setText("Количество записей: " + tabServiceListImpl.getAutomobileList().size());
     }
+    //очистка полей
     private void clearFields(){
     txtGarNumb.setText("");
     txtBrand.setText("");
@@ -638,6 +626,7 @@ days = 365-days;
     txtServDate.setText("");
     txtDaysLast.setText("");
 }
+    //события
     public void actionButtonPressed(ActionEvent actionEvent) {
 
         Object source = actionEvent.getSource();//определения источника,что вызвал наш метод
@@ -696,6 +685,7 @@ days = 365-days;
 
         }
     }
+    //удаление авто из БД
     public void actionDelete(){
         Connection conn = DbConnection.ConnectDb();
         PreparedStatement pst = null;
@@ -722,6 +712,7 @@ days = 365-days;
             }
         }
     }
+    //события меню
     public void actionMenuItemPressed(ActionEvent actionEvent) {
         Object source = actionEvent.getSource();//определения источника,что вызвал наш метод
         // если нажата не кнопка-выходим из метода
@@ -783,6 +774,7 @@ days = 365-days;
                 break;
         }
     }
+    //Отображаем склад
     public void showStore(){
     if (storeStage==null){
         storeStage = new Stage();
@@ -845,6 +837,9 @@ days = 365-days;
         addDbStage.showAndWait(); //ожидание закрытия окна
 
     }
+     /*добавляем сервисную информации о вновь добавленном в БД авто
+     создаем таблицу определенного типа
+    */
     private void addNewAuto() {
         conn = DbConnection.ConnectDb(txtBrand.getText());
         PreparedStatement pst = null;
@@ -884,6 +879,7 @@ days = 365-days;
             }
         }
     }
+    /*заполняем новую таблицу данными*/
     private void dataAdding(){
         Connection conn = DbConnection.ConnectDb(txtBrand.getText());
         PreparedStatement pst = null;
@@ -931,6 +927,7 @@ pst.close();
             }
         }
     }
+    /*проводим расчеты,обновляем таблицу*/
     private void updateByModel() {
         Connection conn = DbConnection.ConnectDb(txtBrand.getText());
         PreparedStatement pst = null;
@@ -974,28 +971,6 @@ pst.close();
         }
     }
     private void blinkingDist(){
-
-//        columnServLast.setCellFactory(new Callback<TableColumn<Automobile, String>, TableCell<Automobile, String>>()
-//        {
-//            public TableCell<Automobile, String> call(TableColumn<Automobile, String> column)
-//            {
-//                final FlashingLabel blinkLabel = new FlashingLabel();
-//                blinkLabel.setPrefWidth(30);
-//                blinkLabel.setStyle("-fx-background-color: #FF0000");
-//                TableCell<Automobile, String> cell = new TableCell<Automobile, String>()
-//                {
-//                    protected void updateItem(String value, boolean empty)
-//                    {
-//                        super.updateItem(value, empty);
-//                        blinkLabel.setText(value);
-//                        blinkLabel.setVisible(!empty);
-//                    }
-//                };
-//                cell.setGraphic(blinkLabel);
-//                return cell;
-//            }
-//        });
-
         columnServLast.setCellFactory(column -> {
             return new TableCell<Automobile, String>() {
                 @Override
@@ -1017,8 +992,8 @@ pst.close();
                 }
             };
         });
-
     }
+    /*автозаполнение поля "марка автомобиля"*/
     public  class BrandAutoComplete extends ControlsFXSample {
         MainController mainController;
         Connection conn =null;
@@ -1028,11 +1003,7 @@ pst.close();
         private String[] _possibleSuggestions =
 
                 {
-// "MERCEDES-BENZ", "TOYOTA","AUDI", "VOLKSWAGEN",
-//                "BMW", "MITSUBISHI", "SKODA", "HYUNDAI","OPEL","HONDA","КАМАЗ","УАЗ","ПАЗ",
-//                "ГАЗ","ВАЗ","FORD","NISSAN"
-                };
-        //private Set<String> possibleSuggestions = new HashSet<>(Arrays.asList(_possibleSuggestions));
+
 
         @Override
         public String getSampleName() {
@@ -1059,6 +1030,8 @@ pst.close();
         }
 
     }
+    }
+     /*автозаполнение поля "номер кузова"*/
     public  class VinAutoComplete extends ControlsFXSample {
 
 
@@ -1084,33 +1057,20 @@ pst.close();
             return Utils.JAVADOC_BASE + "org/controlsfx/control/textfield/TextFields.html";
         }
         public void txtVinAutocompl(TextField textVin) {
-//            PreparedStatement pst = null;
-            String modName = txtBrand.getText();
-//            ResultSet rs = null;
-            Connection conn =DbConnection.ConnectDb();
-//            ConnectionPool pool = new ConnectionPool();
-//            //единожды инициализируем его указав класс драйвера, URL базы данных, а также логин и пароль к базе данных
-//            pool.initConnectionPool( "org.sqlite.JDBC", "jdbc:sqlite:dir\\"+modName+".sqlite", "test", "test" );
-//
-//            //получаем connection
-//            Connection con = pool.getConnection();
-
-            try {
+        String modName = txtBrand.getText();
+        Connection conn =DbConnection.ConnectDb();
+                   try {
                 _possibleSuggestions.clear();
                 String t = "SELECT * FROM '" + txtBrand.getText() + "' ";
                 pst = conn.prepareStatement(t);
                 rs = pst.executeQuery();
-
                 while (rs.next()) {
-
                     _possibleSuggestions.add(rs.getString("VinCode"));
                     // System.out.println(rs.getString("model"));
                 }
                 pst.close();
                 rs.close();
-                // pool.returnConnection(con);
-
-            } catch (Exception evtt) {
+                        } catch (Exception evtt) {
                 evtt.printStackTrace();
             }
 
@@ -1127,14 +1087,13 @@ pst.close();
 
         }
     }
+    /*исходя из значения номера кузова заполняем остальные поля*/
     public void setTextToFields(){
         String modName = txtBrand.getText();
         String data = txtVin.getText();
         PreparedStatement setFieldsSt = null;
         Connection conn = DbConnection.ConnectDb();
         ResultSet setFieldsRs = null;
-
-
         try{
             String setFields = "Select*from '"+txtBrand.getText()+"' where vinCode = '"+data+"'";
             setFieldsSt = conn.prepareStatement(setFields);
@@ -1147,8 +1106,7 @@ pst.close();
             }
             setFieldsSt.close();
             setFieldsRs.close();
-            // connection.close();
-            // pool.returnConnection(con);
+           
 
         }catch(Exception eMb){
             eMb.printStackTrace();}
@@ -1183,5 +1141,3 @@ pst.close();
     }
 
 }
-
-
