@@ -44,46 +44,11 @@ public class Main extends Application {
         primaryStage.setMinHeight(600);
         primaryStage.show();
 
-        testData();
+        
     }
-    private void testData(){
+    
 
-    /*CollectionsCarList carList = new CollectionsCarList();
-    DataBaseCarList dataBaseCarList = new DataBaseCarList();
-
-    Automobile automobile = new Automobile();
-    automobile.setBrand("Audi");
-    automobile.setModel("A6Quttro");
-    automobile.setGarNumb("2121");
-    automobile.setRegNumb("333");
-    automobile.setEngNumb("x43333");
-    automobile.setEngVol("3.2");
-    automobile.setVinCode("zxfc 12345678");
-    automobile.setYearsOfRel("2014");
-    automobile.setServInt("10000");
-    automobile.setSpdVol("9455");
-    automobile.setServLast("545");
-
-    Automobile automobile2 = new Automobile();
-    automobile2.setBrand("Toyota");
-    automobile2.setModel("Camry");
-    automobile2.setGarNumb("2122");
-    automobile2.setRegNumb("444");
-    automobile2.setEngNumb("x65555");
-    automobile2.setEngVol("3.2");
-    automobile2.setVinCode("xcc 444555");
-    automobile2.setYearsOfRel("2014");
-    automobile2.setServInt("10000");
-    automobile2.setSpdVol("9200");
-    automobile2.setServLast("800");
-
-    carList.add(automobile);
-    carList.add(automobile2);
-    dataBaseCarList.add(automobile);
-    dataBaseCarList.add(automobile2);
-
-*/
-    }
+    
 
     public static void main(String[] args) {
         launch(args);
