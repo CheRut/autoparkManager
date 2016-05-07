@@ -1,21 +1,13 @@
 package connectionDB;
 
-
 import java.sql.Connection;
 import java.sql.DriverManager;
-
 import javax.swing.JOptionPane;
 
-
-/**
- * Created by dimsan on 07.11.2015.
- */
 public class DbConnection {
     Connection  con= null;
     public static Connection ConnectDb(){
-
         try{
-
             Class.forName("org.sqlite.JDBC");
             String dir = System.getProperty("user.dir");
             String dbUrl="jdbc:sqlite:dir\\ProjectListOfCars.sqlite";
@@ -29,6 +21,7 @@ public class DbConnection {
         }
 
     }
+    
     public static Connection ConnectDb(String name){
 
         try{
